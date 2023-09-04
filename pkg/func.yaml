@@ -1,0 +1,24 @@
+---
+functions:
+  - name: setup-ssh
+    description: |
+      configure an ssh server with public ssh key
+    # this is the public function invoked by the operator
+    export: true
+    # defines the network configuration for the function
+    network:
+      groups:
+        # only one server group, minimum 1 and maximum any number, with an "ssh-server" tag
+        - A:ssh-server:1:*
+      rules: [ ]
+    run:
+      # this statement triggers the execution of the network function using
+      # for information on the definition of the flags used see cli help `art net exe -h`
+      - art net exe -n ${NET_ID} -u ${ART_REG_USER}:${ART_REG_PASS} ${ART_PACKAGE_FQDN} --soe -p configure-ssh-server
+
+  - name: configure-ssh-server
+    description: |
+      private function configure an ssh server with public ssh key
+    run:
+      - bash ./scripts/set-ssh-server.sh
+...

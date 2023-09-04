@@ -1,0 +1,23 @@
+---
+input:
+  var:
+    - name: IP_LIST
+      description: |
+        A list of host IP addresses (seperated by commas, e.g IP1,IP2,IP3) to deploy out to
+      required: true
+
+    - name: NET_ID
+      description: |
+        Unique Artisan network name
+        Example: "ssh-deploy-123"
+      required: true
+
+    - name: ART_REG_USER
+      description: username required to authenticate with the remote artisan registry to pull the package
+      required: true
+
+  secret:
+    - name: ART_REG_PASS
+      description: password required to authenticate with the remote artisan registry to pull the package
+      required: true
+...

@@ -1,0 +1,60 @@
+---
+# this is the build file used to build the package
+# it should not be confused with the build file that is part of the package, and which
+# define the functions the package should expose
+
+# this section provides configuration variables affecting the package build, change as required
+env:
+  # the artisan registry to build the package for
+  ART_REG: localhost:8082
+  # the full package name
+  PKG_NAME: ops/ssh
+  # the version tag for the package
+  VER: 1.0
+  # the users who can open this package, change to match the domain of your user or leave it blank if no-one is
+  # supposed to ever open this package
+  OPEN_POLICY: "^.*@southwinds.io$"
+  # the path where scripts are located
+  SCRIPT_PATH: pkg/scripts
+
+# the build profiles define instructions for creating artisan packages
+# in this case only one profile exists but more can be added
+# ypu can tell artisan which profile to use as part of the `art build` command
+profiles:
+  - name: default
+    description: |
+      this profile packages the content of the ./pkg folder
+      the ./pkg folder contains the files to be packaged
+    # assigns a type to the built package, it can be anything
+    # it is used to tell which type of package it is when listing packages
+    # `exec` is used to declare the package is executable - i.e. it contains functions that can create side effects
+    type: exec
+    # the target is the folder to be packaged
+    target: ./pkg
+
+functions:
+  - name: build
+    description: |
+      builds this package
+    run:
+      - $(chmodx)
+      - $(keygen)
+      - art build -t ${ART_REG}/${PKG_NAME}:${VER} -p default --open-policy ${OPEN_POLICY} .
+
+  - name: chmodx
+    description: |
+      ensures all executable scripts have correct permissions before packaging
+    run:
+      - chmod +x ${SCRIPT_PATH}/set-ssh-server.sh
+
+  - name: keygen
+    description: |
+      generates ssh key pair to connect to server
+    run:
+      # removes any re-existing ssh keys
+      - rm -f id_rsa pkg/id_rsa.pub
+      # re-generates an ssh key pair with no passphrase
+      - ssh-keygen -t rsa -b 4096 -f ./id_rsa -N ''
+      # moves the public key into the pkg folder so that it is part of the generated artisan package
+      - mv id_rsa.pub ./pkg
+...

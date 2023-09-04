@@ -1,0 +1,15 @@
+---
+# this build file contains the entry point for running automation in this package
+# TODO: complete ??? values below
+author: ???
+license: ???
+labels:
+  platform: ???
+  arch: ???
+
+# to keep a large project manageable, this file acts as the declaration for included files that will become
+# also part of this file
+includes:
+  - input.yaml
+  - func.yaml
+...
