@@ -14,7 +14,7 @@ functions:
     run:
       # this statement triggers the execution of the network function using
       # for information on the definition of the flags used see cli help `art net exe -h`
-      # NOTE: network name NET_ID and tag ssh_server are used to determine which services the function should run on
+      # NOTE: network name NET_ID and tag ssh_server are used to determine which servers the function should run on
       - art net exe -n ${NET_ID} -u ${ART_REG_USER}:${ART_REG_PASS} ${ART_PACKAGE_FQDN} --soe -t ssh_server -p configure-ssh-server
 
   - name: configure-ssh-server
